@@ -45,4 +45,45 @@ class VariableAmountOfNetworkRequestsViewModel(
             }
         }
     }
+
+    fun performNetworkRequestsSequentiallyRefactored() {
+        uiState.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                mockApi
+                    .getRecentAndroidVersions()
+                    .map(AndroidVersion::apiLevel)
+                    .map { apiLevel ->
+                        mockApi.getAndroidVersionFeatures(apiLevel)
+                    }
+                    .let(UiState::Success)
+                    .let(uiState::setValue)
+            } catch (exception: Exception) {
+                uiState.value = UiState.Error("Network request failed")
+            }
+        }
+    }
+
+    fun performNetworkRequestsConcurrentlyRefactored() {
+        uiState.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                mockApi
+                    .getRecentAndroidVersions()
+                    .map(AndroidVersion::apiLevel)
+                    .map { apiLevel ->
+                        async {
+                            mockApi.getAndroidVersionFeatures(apiLevel)
+                        }
+                    }
+                    .awaitAll()
+                    .let(UiState::Success)
+                    .let(uiState::setValue)
+            } catch (exception: Exception) {
+                uiState.value = UiState.Error("Network request failed")
+            }
+        }
+    }
 }
