@@ -21,3 +21,8 @@ suspend fun wait(x: Long) {
     delay(1000)
     println("after delay")
 }
+
+//Flow          RxJava
+//map           map
+//map           switchMap
+//mapLatest     switchMapSingle
