@@ -11,6 +11,9 @@ fun main() = runBlocking<Unit> {
                 println("operation number $index")
                 Thread.sleep(100)
             } else {
+                withContext(NonCancellable) {
+                    delay(100)
+                }
                 println("Cleaning up ... ")
                 throw CancellationException()
             }
