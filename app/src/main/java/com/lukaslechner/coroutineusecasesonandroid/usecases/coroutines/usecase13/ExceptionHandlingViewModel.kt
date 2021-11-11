@@ -30,7 +30,15 @@ class ExceptionHandlingViewModel(
     }
 
     fun handleWithCoroutineExceptionHandler() {
+        uiState.value = UiState.Loading
 
+        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+            uiState.value = UiState.Error("Network Request failed!")
+        }
+
+        viewModelScope.launch(exceptionHandler) {
+            api.getAndroidVersionFeatures(27)
+        }
     }
 
     fun showResultsEvenIfChildCoroutineFails() {
