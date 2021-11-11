@@ -60,29 +60,21 @@ class ExceptionHandlingViewModel(
                     api.getAndroidVersionFeatures(29)
                 }
 
-                val oreoFeatures = try {
-                    oreoFeaturesDeferred.await()
-                } catch (e: Exception) {
-                    Timber.e("Error loading oreo features $e")
-                    null
+                val versionFeatures = listOf(
+                    oreoFeaturesDeferred,
+                    pieFeaturesDeferred,
+                    android10FeaturesDeferred
+                ).mapNotNull {
+                    try {
+                        it.await()
+                    } catch (e: Exception) {
+                        if (e is CancellationException) {
+                            throw e
+                        }
+                        Timber.e("Error loading feature data!")
+                        null
+                    }
                 }
-
-                val pieFeatures = try {
-                    pieFeaturesDeferred.await()
-                } catch (e: Exception) {
-                    Timber.e("Error loading pie features $e")
-                    null
-                }
-
-                val android10Features = try {
-                    android10FeaturesDeferred.await()
-                } catch (e: Exception) {
-                    Timber.e("Error loading android10 features $e")
-                    null
-                }
-
-                val versionFeatures =
-                    listOfNotNull(oreoFeatures, pieFeatures, android10Features)
 
                 uiState.value = UiState.Success(versionFeatures)
 
