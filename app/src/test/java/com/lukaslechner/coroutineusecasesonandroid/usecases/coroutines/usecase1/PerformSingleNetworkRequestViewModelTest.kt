@@ -56,6 +56,28 @@ class PerformSingleNetworkRequestViewModelTest {
         dispatcher.cleanupTestCoroutines()
     }
 
+    @Test
+    fun `should return Error when network request fails`() {
+        //Arrange
+        Dispatchers.setMain(TestCoroutineDispatcher())
+
+        val fakeApi = FakeErrorApi()
+        val viewModel = PerformSingleNetworkRequestViewModel(fakeApi)
+        observeViewModel(viewModel)
+
+        //Act
+        viewModel.performSingleNetworkRequest()
+
+        //Assert
+        assertEquals(
+            listOf(
+                UiState.Loading,
+                UiState.Error("Network request failed!")
+            ),
+            receivedUiStates
+        )
+    }
+
     private fun observeViewModel(viewModel: PerformSingleNetworkRequestViewModel) {
         viewModel.uiState().observeForever { uiState ->
             if (uiState != null) {
