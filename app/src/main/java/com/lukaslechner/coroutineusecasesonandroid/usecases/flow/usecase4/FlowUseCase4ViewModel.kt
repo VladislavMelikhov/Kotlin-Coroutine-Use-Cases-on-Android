@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 
+private const val TAG = "ExposeFlowInVM"
+
 class FlowUseCase4ViewModel(
     stockPriceDataSource: StockPriceDataSource
 ) : BaseViewModel<UiState>() {
@@ -15,9 +17,10 @@ class FlowUseCase4ViewModel(
         .latestStockList
         .map(UiState::Success)
         .onStart<UiState> {
+            Timber.tag(TAG).d("Flow started")
             emit(UiState.Loading)
         }
         .onCompletion {
-            Timber.tag("ExposeFlowInVM").d("Flow has completed.")
+            Timber.tag(TAG).d("Flow completed")
         }
 }
