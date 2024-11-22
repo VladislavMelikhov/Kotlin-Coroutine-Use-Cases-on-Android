@@ -29,6 +29,6 @@ class FlowUseCase4ViewModel(
         }
         .shareIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed()
+            SharingStarted.WhileSubscribed(5_000)
         )
 }
