@@ -2,7 +2,7 @@ package com.lukaslechner.coroutineusecasesonandroid.playground
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.currentTime
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 
@@ -24,7 +24,7 @@ fun CoroutineScope.functionThatStartsNewCoroutine() {
 class TestClass {
 
     @Test
-    fun `functionWithDelay() should return 42`() = runBlockingTest {
+    fun `functionWithDelay() should return 42`() = runTest {
 
         val realTimeStart = System.currentTimeMillis()
         val virtualTimeStart = currentTime
@@ -35,7 +35,7 @@ class TestClass {
 
         functionThatStartsNewCoroutine()
         testScheduler.apply {
-            advanceTimeBy(1000)
+            advanceTimeBy(1010)
         }
 
         val realTimeDuration = System.currentTimeMillis() - realTimeStart
