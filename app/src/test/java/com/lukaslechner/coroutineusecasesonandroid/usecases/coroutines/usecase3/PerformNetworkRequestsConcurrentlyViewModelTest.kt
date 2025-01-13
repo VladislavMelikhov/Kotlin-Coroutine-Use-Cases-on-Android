@@ -5,6 +5,8 @@ import com.lukaslechner.coroutineusecasesonandroid.mock.mockVersionFeaturesAndro
 import com.lukaslechner.coroutineusecasesonandroid.mock.mockVersionFeaturesOreo
 import com.lukaslechner.coroutineusecasesonandroid.mock.mockVersionFeaturesPie
 import com.lukaslechner.coroutineusecasesonandroid.utils.MainCoroutineScopeRule
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
 import org.junit.Rule
@@ -32,7 +34,8 @@ class PerformNetworkRequestsConcurrentlyViewModelTest {
 
         //Act
         viewModel.performNetworkRequestsSequentially()
-        val forwardedTime = advanceUntilIdle()
+        advanceUntilIdle()
+        val forwardedTime = currentTime
 
         //Assert
         assertEquals(
@@ -62,7 +65,8 @@ class PerformNetworkRequestsConcurrentlyViewModelTest {
 
         //Act
         viewModel.performNetworkRequestsConcurrently()
-        val forwardedTime = advanceUntilIdle()
+        advanceUntilIdle()
+        val forwardedTime = currentTime
 
         //Assert
         assertEquals(

@@ -1,6 +1,7 @@
 package com.lukaslechner.coroutineusecasesonandroid.playground
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Test
@@ -33,7 +34,9 @@ class TestClass {
 //        Assert.assertEquals(42, actual)
 
         functionThatStartsNewCoroutine()
-        advanceTimeBy(1000)
+        testScheduler.apply {
+            advanceTimeBy(1000)
+        }
 
         val realTimeDuration = System.currentTimeMillis() - realTimeStart
         val virtualTimeDuration = currentTime - virtualTimeStart
